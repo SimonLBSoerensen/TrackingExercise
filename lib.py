@@ -1,4 +1,5 @@
 from IPython.display import HTML
+import PIL.Image
 from base64 import b64encode
 import seaborn as sns
 import ffmpeg
