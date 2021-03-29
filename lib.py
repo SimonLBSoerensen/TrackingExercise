@@ -6,19 +6,30 @@ import ffmpeg
 import numpy as np
 
 def show_video(video_path, video_width = "fill"):
-  
+  """
+  video_path (str): The path to the video
+  video_width: Width for the window the video will be shown in 
+  """
   video_file = open(video_path, "r+b").read()
 
   video_url = f"data:video/mp4;base64,{b64encode(video_file).decode()}"
   return HTML(f"""<video width={video_width} controls><source src="{video_url}"></video>""")
 
-def create_video(frames='Track/%03d.png', video_file = 'movie.mp4'):
-    if os.path.exists(video_file):
-        os.remove(video_file)
-    ffmpeg.input(frames, framerate=fps).output(video_file).run() 
+def create_video(frames_patten='Track/%03d.png', video_file = 'movie.mp4', framerate=25):
+  """
+  frames_patten (str): The patten to use to find the frames. The default patten looks for frames in a folder called Track. The frames shoud be named 001.png, 002.png, ..., 999.png
+  video_file (str): The file the video will be saved in 
+  framerate (float): The framerate for the video
+  """
+  if os.path.exists(video_file):
+      os.remove(video_file)
+  ffmpeg.input(frames_patten, framerate=framerate).output(video_file).run() 
 
 class VisTrack:
     def __init__(self, unique_colors=400):
+        """
+        unique_colors (int): The number of unique colors (the number of unique colors dos not need to be greater than the max id)
+        """
         self._unique_colors = unique_colors
         self._id_dict = {}
         self.p = np.zeros(unique_colors)
@@ -45,6 +56,12 @@ class VisTrack:
 
     def draw_bounding_boxes(self, im: PIL.Image, bboxes: np.ndarray, ids: np.ndarray,
                         scores: np.ndarray) -> PIL.Image:
+        """
+        im (PIL.Image): The image 
+        bboxes (np.ndarray): The bounding boxes. [[x1,y1,x2,y2],...]
+        ids (np.ndarray): The id's for the bounding boxes
+        scores (np.ndarray): The scores's for the bounding boxes
+        """
         im = im.copy()
         draw = PIL.ImageDraw.Draw(im)
 
