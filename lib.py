@@ -3,6 +3,7 @@ import PIL.Image
 from base64 import b64encode
 import seaborn as sns
 import ffmpeg
+import numpy as np
 
 def show_video(video_path, video_width = "fill"):
   
